@@ -17,46 +17,6 @@ An agentic bedtime story generation system that transforms simple bedtime story 
 
 ---
 
-## Architecture & Block Diagram
-
-The system coordinates between the User, an Orchestrator, the Storyteller Agent, and an LLM Judge in a closed-loop refinement cycle:
-
-```mermaid
-flowchart TD
-    %% Styling
-    classDef userClass fill:#4A90E2,stroke:#2C3E50,stroke-width:2px,color:#fff;
-    classDef agentClass fill:#50E3C2,stroke:#16A085,stroke-width:2px,color:#000;
-    classDef judgeClass fill:#F5A623,stroke:#D35400,stroke-width:2px,color:#000;
-    classDef promptClass fill:#9B59B6,stroke:#8E44AD,stroke-width:2px,color:#fff;
-    classDef outputClass fill:#2ECC71,stroke:#27AE60,stroke-width:2px,color:#fff;
-
-    User([User / Parent Request\nAge: 5–10, Theme, Sleepiness]):::userClass --> Orchestrator[⚙️ Bedtime Story Orchestrator]
-
-    subgraph PromptEngineering ["Prompt Engineering Layer"]
-        P1["Storyteller System Prompt\n• 4-Act Slumber Arc\n• Age Vocabulary Gradients\n• Sensory Deceleration"]:::promptClass
-        P2["LLM Judge System Prompt\n• 5-Point Literature Rubric\n• Calming Factor Criteria\n• Strict JSON Schema"]:::promptClass
-        P3["Revision Prompt\n• Previous Draft\n• Rubric Scorecard\n• Actionable Directives"]:::promptClass
-    end
-
-    Orchestrator -->|1. Request Specs + System Prompt| Storyteller[📖 Storyteller Agent\nClaude Haiku 5.5]:::agentClass
-    P1 -.-> Storyteller
-
-    Storyteller -->|2. Initial Story Draft| Draft[📄 Story Draft]
-
-    Draft -->|3. Evaluate Draft| Judge[⚖️ LLM Judge Agent\nClaude Haiku 5.5]:::judgeClass
-    P2 -.-> Judge
-
-    Judge -->|4. JSON Evaluation Report\n• 5 Rubric Scores\n• Strengths & Critiques\n• Actionable Directives\n• Approved: true/false| Decision{Approved?\nScore ≥ 21 & Wind-down ≥ 4}
-
-    Decision -- "No (Iter < Max)" -->|5. Pass Feedback & Critique| Orchestrator
-    Orchestrator -->|6. Feed Actionable Directives| Storyteller
-    P3 -.-> Storyteller
-
-    Decision -- "Yes (Or Max Iter)" --> FinalPresentation[Final Presentation Engine\n• Word Count & Read Time\n• Bedtime Scorecard\n• Formatted Text]:::outputClass
-
-    FinalPresentation --> Reader([Bedtime Reading to Child]):::userClass
-```
-
 ### Component Flow
 
 ```
